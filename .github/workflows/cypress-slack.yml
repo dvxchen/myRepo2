@@ -1,0 +1,36 @@
+name: Cypress + Slack Notification
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 运行 Cypress 测试（官方 Action，自动安装依赖+运行）
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+        env:
+          CI: true
+
+      # ==============================================
+      # 测试后 → 自动发 Slack 通知（无论成功/失败）
+      # ==============================================
+      - name: Notify Slack on Test Result
+        if: always()
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "📝 Cypress 测试完成！\n🔗 仓库：${{ github.repository }}\n👤 执行者：${{ github.actor }}\n✅ 结果：${{ job.status }}\n📊 查看日志：${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
