@@ -1,0 +1,25 @@
+name: Slack Notification
+
+# 触发条件：可自定义（push、PR、部署、手动触发）
+on:
+  push:
+    branches: [ main ]  # 推送到main分支时触发
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:    # 允许手动运行
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Success Notification to Slack
+        uses: slackapi/slack-github-action@v1.24.0  # 官方Slack Action
+        with:
+          # 自定义消息内容（支持Markdown、emoji）
+          payload: |
+            {
+              "text": "✅ GitHub Action 执行成功！\n仓库：${{ github.repository }}\n提交者：${{ github.actor }}\n提交信息：${{ github.event.head_commit.message }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
