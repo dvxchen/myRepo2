@@ -1,22 +1,21 @@
-inputs:
-  # 文本
-  environment:
-    description: '环境'
-    required: true
-    default: 'test'
+name: 带参数 Action
 
-  # 选择框
-  browser:
-    description: '浏览器'
-    required: true
-    default: 'chrome'
-    type: choice
-    options:
-      - chrome
-      - firefox
+# 定义参数（这里加）
+on:
+  workflow_dispatch:
+    inputs:
+      环境:
+        description: '运行环境'
+        required: true
+        default: 'test'
+      消息:
+        description: '自定义消息'
+        required: false
+        default: 'hello'
 
-  # 布尔值
-  send_slack:
-    description: '发送Slack通知'
-    required: false
-    default: true
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 使用参数
+        run: echo "环境 = ${{ inputs.环境 }}, 消息 = ${{ inputs.消息 }}"
