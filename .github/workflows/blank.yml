@@ -1,25 +1,40 @@
-name: Slack Notification
+name: Slack Notify (Success/Failure)
 
-# 触发条件：可自定义（push、PR、部署、手动触发）
 on:
   push:
-    branches: [ main ]  # 推送到main分支时触发
-  pull_request:
     branches: [ main ]
-  workflow_dispatch:    # 允许手动运行
 
 jobs:
-  notify:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Success Notification to Slack
-        uses: slackapi/slack-github-action@v1.24.0  # 官方Slack Action
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 这里可以放你的构建/测试/部署命令
+      - name: Run build
+        run: echo "执行项目构建"
+
+  # 通知任务（依赖上面的任务，无论成功失败都执行）
+  notify:
+    needs: build  # 等待build任务完成
+    if: always()  # 必须加：无论成功/失败/取消都执行
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack on SUCCESS
+        if: success()
+        uses: slackapi/slack-github-action@v1.24.0
         with:
-          # 自定义消息内容（支持Markdown、emoji）
           payload: |
-            {
-              "text": "✅ GitHub Action 执行成功！\n仓库：${{ github.repository }}\n提交者：${{ github.actor }}\n提交信息：${{ github.event.head_commit.message }}"
-            }
+            {"text": "✅ 构建成功！\n仓库：${{ github.repository }}\n提交者：${{ github.actor }}"}
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+      - name: Notify Slack on FAILURE
+        if: failure()
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {"text": "❌ 构建失败！紧急处理！\n仓库：${{ github.repository }}\n链接：${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
