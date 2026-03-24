@@ -1,6 +1,11 @@
 name: 带参数 Action
 
 # 定义参数（这里加）
+inputs:
+  参数名:
+    description: '说明'
+    required: true/false
+    default: '默认值'
 on:
   workflow_dispatch:
     inputs:
