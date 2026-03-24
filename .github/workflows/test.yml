@@ -1,0 +1,22 @@
+inputs:
+  # 文本
+  environment:
+    description: '环境'
+    required: true
+    default: 'test'
+
+  # 选择框
+  browser:
+    description: '浏览器'
+    required: true
+    default: 'chrome'
+    type: choice
+    options:
+      - chrome
+      - firefox
+
+  # 布尔值
+  send_slack:
+    description: '发送Slack通知'
+    required: false
+    default: true
