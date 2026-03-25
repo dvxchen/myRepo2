@@ -34,12 +34,11 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
+          command: npx cypress run --browser chrome --headless --disable-gpu
         env:
           CI: true
           CYPRESS_CASENAME: ${{ inputs.CASENAME }}
-        with:
-          command: npx cypress run --browser chrome --headless --disable-gpu
-
+          
       # ==============================================
       # 自动发送测试结果到 Slack（成功/失败都会发）
       # ==============================================
