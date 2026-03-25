@@ -9,5 +9,4 @@ module.exports = defineConfig({
   },
   chromeWebSecurity: false,
   modifyObstructiveCode: false,
-  headless: true
 });
