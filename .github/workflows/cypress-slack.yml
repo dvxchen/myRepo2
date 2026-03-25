@@ -2,7 +2,7 @@ name: Cypress E2E + Slack Notify
 
 # 👇 消除 Node.js 20 警告
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  # FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
   ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
 on:
   push:
