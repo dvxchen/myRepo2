@@ -8,6 +8,6 @@ module.exports = defineConfig({
     supportFile: false
   },
   chromeWebSecurity: false,
-  modifyObstructiveCode: false
+  modifyObstructiveCode: false,
   headless: true
 });
