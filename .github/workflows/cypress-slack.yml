@@ -34,7 +34,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
-          command: npx cypress run --headless=new
+          command: npx cypress run --headless
         env:
           CI: true
           CYPRESS_CASENAME: ${{ inputs.CASENAME }}
