@@ -10,7 +10,7 @@ on:
       CASENAME:
         description: "测试用例名称"
         required: true
-        default: "https://www.baidu.com"
+        default: "cypress/e2e/**/*.cy.js"
 jobs:
   cypress-test:
     runs-on: ubuntu-latest
