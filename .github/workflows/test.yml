@@ -1,26 +1,30 @@
-name: 带参数 Action
+name: 传参数给 JS
 
-# 定义参数（这里加）
-inputs:
-  参数名:
-    description: '说明'
-    required: true/false
-    default: '默认值'
 on:
   workflow_dispatch:
     inputs:
-      环境:
-        description: '运行环境'
+      userName:
+        description: '你的名字'
         required: true
-        default: 'test'
-      消息:
-        description: '自定义消息'
+        default: '张三'
+      userAge:
+        description: '年龄'
         required: false
-        default: 'hello'
+        default: '20'
 
 jobs:
-  test:
+  run-js:
     runs-on: ubuntu-latest
     steps:
-      - name: 使用参数
-        run: echo "环境 = ${{ inputs.环境 }}, 消息 = ${{ inputs.消息 }}"
+      - uses: actions/checkout@v4
+
+      - name: 安装依赖
+        run: npm install
+
+      # 重点：把 YML 参数 → 环境变量 → 传给 JS
+      - name: 运行 JS 并传参
+        run: node index.js
+        env:
+          # 左边是给JS用的变量名   右边是YML里的参数
+          NAME: ${{ inputs.userName }}
+          AGE: ${{ inputs.userAge }}
